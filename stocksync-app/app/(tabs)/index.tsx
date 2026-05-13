@@ -1,4 +1,5 @@
 import {View, Text, StyleSheet, ScrollView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function HomeScreen() {
   return (
@@ -14,7 +15,15 @@ export default function HomeScreen() {
       </Text>
     </View>
 
-    <View style={styles.card}>
+    <View style={[styles.card, styles.cardBlue]}>
+
+      <Ionicons
+      name="cube-outline"
+      size={28}
+      color="#3B82F6"
+      style={styles.cardIcon}
+      />
+
       <Text style={styles.cardTitle}>
         245 Products
       </Text>
@@ -24,7 +33,16 @@ export default function HomeScreen() {
       </Text>
     </View>
 
-    <View style={styles.card}>
+    <View style={[styles.card, styles.cardOrange]}>
+
+      <Ionicons
+      name="warning-outline"
+      size={28}
+      color="#F59E0B"
+      style={styles.cardIcon}
+      />
+      
+
       <Text style={styles.cardTitle}>
         18 Low Stock
       </Text>
@@ -34,7 +52,16 @@ export default function HomeScreen() {
       </Text>
     </View>
 
-    <View style={styles.card}>
+    <View style={[styles.card, styles.cardRed]}>
+
+      <Ionicons
+      name="close-circle-outline"
+      size={28}
+      color="#EF4444"
+      style={styles.cardIcon}
+      />
+      
+
       <Text style={styles.cardTitle}>
         12 Out of Stock
       </Text>
@@ -44,7 +71,15 @@ export default function HomeScreen() {
       </Text>
     </View>
 
-    <View style={styles.card}>
+    <View style={[styles.card, styles.cardGreen]}>
+
+      <Ionicons
+      name="cash-outline"
+      size={28}
+      color="#10B981"
+      style={styles.cardIcon}
+      />
+      
       <Text style={styles.cardTitle}>
         ₱24K Sales
       </Text>
@@ -55,7 +90,7 @@ export default function HomeScreen() {
     </View>
 
   
-<Text style={styles.sectionTtitle}>
+<Text style={styles.sectionTitle}>
   Recent Inventory</Text> 
     <View style={styles.activityCard}>
       <Text style={styles.activityTitle}>
@@ -115,7 +150,8 @@ subtitle: {
   marginBottom: 16,
 
   borderWidth: 1,
-  borderColor: "#E5E7EB",
+  borderStyle:"solid",
+  borderColor: "#D1D5DB",
 
   shadowColor: "#000",
   shadowOffset: {
@@ -129,19 +165,19 @@ subtitle: {
 },
 
   cardBlue: {
-  backgroundColor: "#E8F1FF",
+  backgroundColor: "#EEF4FF",
 },
 
 cardOrange: {
-  backgroundColor: "#FFF4E5",
+  backgroundColor: "#FFF7ED",
 },
 
 cardRed: {
-  backgroundColor: "#FFECEC",
+  backgroundColor: "#FEF2F2",
 },
 
 cardGreen: {
-  backgroundColor: "#EAF7EE",
+  backgroundColor: "#F0FDF4",
 },
 
 sectionTitle: {
@@ -180,13 +216,17 @@ activitySubtitle: {
 
 cardTitle: {
   fontSize: 18,
-  fontWeight: "bold",
+  fontWeight: "700",
 },
 
 cardDescription: {
   marginTop: 8,
-  color: "gray",
+  color: "#6B7280",
   lineHeight: 20,
+},
+
+cardIcon: {
+  marginBottom: 14,
 },
 
 
