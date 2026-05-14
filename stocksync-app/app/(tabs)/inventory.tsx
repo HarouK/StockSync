@@ -1,73 +1,161 @@
-import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
+
+import { Ionicons } from "@expo/vector-icons";
 
 export default function InventoryScreen() {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [productQuantity, setProductQuantity] = useState("");
+
+  const [products, setProducts] = useState([
+    {
+      name: "Wireless Mouse",
+      price: "₱899",
+      stock: "In Stock",
+    },
+    {
+      name: "Mechanical Keyboard",
+      price: "₱2499",
+      stock: "Low Stock",
+    },
+    {
+      name: "USB-C Cable",
+      price: "₱299",
+      stock: "Out of Stock",
+    },
+  ]);
+
+  const addProduct = () => {
+    const newProduct = {
+      name: productName,
+      price: `₱${productPrice}`,
+      stock:
+        Number(productQuantity) <= 0
+          ? "Out of Stock"
+          : Number(productQuantity) <= 5
+          ? "Low Stock"
+          : "In Stock",
+    };
+
+    setProducts([...products, newProduct]);
+
+    setProductName("");
+    setProductPrice("");
+    setProductQuantity("");
+
+    setModalVisible(false);
+  };
+
   return (
     <ScrollView style={styles.container}>
+      <Text style={styles.title}>Inventory</Text>
 
-      <Text style={styles.title}>
-        Inventory
-      </Text>
+      <View style={styles.searchContainer}>
+        <TextInput
+          placeholder="Search products..."
+          style={styles.searchInput}
+        />
 
-      <TextInput
-        placeholder="Search products..."
-        placeholderTextColor="#9CA3AF"
-        style={styles.searchBar}
-      />
-
-      <View style={styles.productCard}>
-        <View>
-          <Text style={styles.productName}>
-            Wireless Mouse
-          </Text>
-
-          <Text style={styles.productPrice}>
-            ₱899
-          </Text>
-        </View>
-
-        <View style={styles.stockBadge}>
-          <Text style={styles.stockText}>
-            In Stock
-          </Text>
-        </View>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => setModalVisible(true)}
+        >
+          <Ionicons name="add" size={28} color="white" />
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.productCard}>
-        <View>
-          <Text style={styles.productName}>
-            Mechanical Keyboard
-          </Text>
+      {products.map((item, index) => (
+        <View key={index} style={styles.productCard}>
+          <View>
+            <Text style={styles.productName}>
+              {item.name}
+            </Text>
 
-          <Text style={styles.productPrice}>
-            ₱2499
-          </Text>
+            <Text style={styles.productPrice}>
+              {item.price}
+            </Text>
+          </View>
+
+          <View
+            style={
+              item.stock === "In Stock"
+                ? styles.stockBadge
+                : item.stock === "Low Stock"
+                ? styles.lowStockBadge
+                : styles.outBadge
+            }
+          >
+            <Text
+              style={
+                item.stock === "In Stock"
+                  ? styles.stockText
+                  : item.stock === "Low Stock"
+                  ? styles.lowStockText
+                  : styles.outText
+              }
+            >
+              {item.stock}
+            </Text>
+          </View>
         </View>
+      ))}
 
-        <View style={styles.lowStockBadge}>
-          <Text style={styles.lowStockText}>
-            Low Stock
-          </Text>
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="fade"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+
+            <Text style={styles.modalTitle}>
+              Add Product
+            </Text>
+
+            <TextInput
+              placeholder="Product name"
+              style={styles.modalInput}
+              value={productName}
+              onChangeText={setProductName}
+            />
+
+            <TextInput
+              placeholder="Price"
+              style={styles.modalInput}
+              value={productPrice}
+              onChangeText={setProductPrice}
+            />
+
+            <TextInput
+              placeholder="Quantity"
+              style={styles.modalInput}
+              value={productQuantity}
+              onChangeText={setProductQuantity}
+            />
+
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={addProduct}
+            >
+              <Text style={styles.saveButtonText}>
+                Save Product
+              </Text>
+            </TouchableOpacity>
+
+          </View>
         </View>
-      </View>
-
-      <View style={styles.productCard}>
-        <View>
-          <Text style={styles.productName}>
-            USB-C Cable
-          </Text>
-
-          <Text style={styles.productPrice}>
-            ₱299
-          </Text>
-        </View>
-
-        <View style={styles.outBadge}>
-          <Text style={styles.outText}>
-            Out of Stock
-          </Text>
-        </View>
-      </View>
-
+      </Modal>
     </ScrollView>
   );
 }
@@ -85,14 +173,29 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  searchBar: {
-    backgroundColor: "white",
-    padding: 16,
-    borderRadius: 16,
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
+  },
 
+  searchInput: {
+    flex: 1,
+    backgroundColor: "white",
+    padding: 14,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: "#E5E7EB",
+    marginRight: 12,
+  },
+
+  addButton: {
+    width: 52,
+    height: 52,
+    borderRadius: 16,
+    backgroundColor: "#2563EB",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   productCard: {
@@ -153,5 +256,47 @@ const styles = StyleSheet.create({
   outText: {
     color: "#DC2626",
     fontWeight: "600",
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  modalContent: {
+    width: "85%",
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 20,
+  },
+
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+
+  modalInput: {
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 12,
+    padding: 14,
+    marginTop: 12,
+  },
+
+  saveButton: {
+    backgroundColor: "#2563EB",
+    padding: 16,
+    borderRadius: 14,
+    alignItems: "center",
+    marginTop: 18,
+  },
+
+  saveButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
